@@ -20,7 +20,9 @@ export default createReducer(initialState, {
       destroyed: true,
     });
   },
-  [messages.CONFIGURED]: (state, { payload }) => {
+  [messages.CONFIGURED]: (state, {
+   payload,
+  }) => {
     return state.merge({
       delay: payload.delay,
       domSelector: payload.domSelector,

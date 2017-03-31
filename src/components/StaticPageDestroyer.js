@@ -1,4 +1,4 @@
-import React, { Component, PropTypes, createElement } from 'react';
+import { Component, PropTypes, createElement } from 'react';
 
 class StaticPageDestroyer extends Component {
   static defaultProps = {
@@ -8,6 +8,7 @@ class StaticPageDestroyer extends Component {
   static propTypes = {
     dom: PropTypes.object,
     domSelector: PropTypes.string.isRequired,
+    component: PropTypes.node.isRequired,
   };
 
   componentWillUnmount() {
@@ -20,7 +21,7 @@ class StaticPageDestroyer extends Component {
   render() {
     const {
       component,
-      ...rest,
+      ...rest
     } = this.props;
 
     return createElement(component, {

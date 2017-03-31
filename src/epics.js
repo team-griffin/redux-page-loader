@@ -15,12 +15,14 @@ export const loaded = (actions$, store) => {
 
       return of(messages.destroyed())
         ::delay(delayTime);
-    })
+    });
 };
 
 export const configure = (actions$) => {
   return actions$.ofType(signals.CONFIGURE)
-    ::map(({ payload }) => {
+    ::map(({
+     payload,
+    }) => {
       return messages.configured(payload);
     });
 };

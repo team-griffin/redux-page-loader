@@ -43,6 +43,14 @@ const PageGuard = (props) => {
   );
 };
 
+PageGuard.propTypes = {
+  loaded: PropTypes.boolean,
+  destroyed: PropTypes.boolean,
+  domSelector: PropTypes.string.isRequired,
+  pageComponent: PropTypes.object.isRequired,
+  destroyerProps: PropTypes.object.isRequired,
+};
+
 const mapStateToProps = (state) => {
   return {
     destroyed: isDestroyed(state),
