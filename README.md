@@ -13,7 +13,7 @@ when the page is ready to be shown easily remove it.
 
 ## Requirements
 - redux
-- redux-observable
+- redux-most
 
 ## Usage
 
@@ -78,7 +78,7 @@ Once it has determined the page is ready it will render your component behind th
 
 This is a connected component.
 
-```javascript
+```jsx
 <PageGuard
   pageComponent={() => {
     return (
@@ -105,12 +105,12 @@ combineReducers({
 });
 
 // Epics
-import { createEpicMiddleware, combineEpics } from 'redux-observable';
+import { createEpicMiddleware, combineEpics } from 'redux-most';
 import { pageLoaderEpics } from '@team-griffin/redux-page-loader';
 
-createEpicMiddleware(combineEpics(
+createEpicMiddleware(combineEpics([
   pageLoaderEpics,
-));
+]));
 ```
 
 ### Loaded and Configuration

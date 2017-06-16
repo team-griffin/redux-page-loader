@@ -3,13 +3,14 @@ import reducer from './reducer';
 import * as messages from './messages';
 import * as signals from './signals';
 import * as selectors from './selectors';
-import epics from './epics';
+import * as epics from './epics';
 
 export {
   ConnectedPageGuard as PageGuard,
-  epics,
   messages,
   signals,
   selectors,
   reducer,
 };
+
+export const epic = epics.rootEpic;

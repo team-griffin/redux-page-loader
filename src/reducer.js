@@ -1,31 +1,24 @@
 import { createReducer } from 'redux-create-reducer';
-import { Map } from 'immutable';
 import * as messages from './messages';
+import * as r from 'ramda';
 
-export const initialState = Map({
+export const initialState = {
   loaded: false,
   destroyed: false,
   delay: 2000,
   domSelector: '.page-loader',
-});
+};
 
 export default createReducer(initialState, {
-  [messages.LOADED]: (state) => {
-    return state.merge({
-      loaded: true,
-    });
-  },
-  [messages.DESTROYED]: (state) => {
-    return state.merge({
-      destroyed: true,
-    });
-  },
   [messages.CONFIGURED]: (state, {
    payload,
-  }) => {
-    return state.merge({
+  }) => r.merge(
+    state,
+    {
       delay: payload.delay,
       domSelector: payload.domSelector,
-    });
-  },
+    }
+  ),
+  [messages.LOADED]: r.assoc('loaded', true),
+  [messages.DESTROYED]: r.assoc('destroyed', true),
 });
