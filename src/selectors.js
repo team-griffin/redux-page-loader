@@ -1,26 +1,19 @@
 import { createSelector } from 'reselect';
+import * as r from 'ramda';
 
-export const getPageLoader = (state) => {
-  return state.pageLoader;
-};
+export const getPageLoader = r.prop('pageLoader');
 
 export const isLoaded = createSelector(
   getPageLoader,
-  (pageLoader) => {
-    return pageLoader.get('loaded');
-  }
+  r.prop('loaded'),
 );
 
 export const isDestroyed = createSelector(
   getPageLoader,
-  (pageLoader) => {
-    return pageLoader.get('destroyed');
-  }
+  r.prop('destroyed'),
 );
 
 export const getDelay = createSelector(
   getPageLoader,
-  (pageLoader) => {
-    return pageLoader.get('delay');
-  }
+  r.prop('delay'),
 );

@@ -1,33 +1,38 @@
-import { Component, PropTypes, createElement } from 'react';
+import { createElement } from 'react';
+import PropTypes from 'prop-types';
+import {
+  defaultProps,
+  setDisplayName,
+  compose,
+  setPropTypes,
+  lifecycle,
+} from 'recompose';
 
-class StaticPageDestroyer extends Component {
-  static defaultProps = {
-    dom: document,
-  };
+const PureStaticPageDestroyer = ({
+  component,
+  ...rest,
+}) => createElement(component, {
+  ...rest,
+});
 
-  static propTypes = {
+const enhance = compose(
+  setDisplayName('StaticPageDestroyer'),
+  setPropTypes({
     dom: PropTypes.object,
     domSelector: PropTypes.string.isRequired,
-    component: PropTypes.node.isRequired,
-  };
-
-  componentWillUnmount() {
-    const pageLoader = this.props.dom.querySelector(this.props.domSelector);
-    if (pageLoader != null) {
-      pageLoader.parentNode.removeChild(pageLoader);
+    component: PropTypes.node.isRequired,    
+  }),
+  defaultProps({
+    dom: document,
+  }),
+  lifecycle({
+    componentWillUnmount: function() {
+      const pageLoader = this.props.dom.querySelector(this.props.domSelector);
+      if (pageLoader != null) {
+        pageLoader.parentNode.removeChild(pageLoader);
+      }      
     }
-  }
+  }),
+);
 
-  render() {
-    const {
-      component,
-      ...rest
-    } = this.props;
-
-    return createElement(component, {
-      ...rest,
-    });
-  }
-}
-
-export default StaticPageDestroyer;
+export default enhance(PureStaticPageDestroyer);

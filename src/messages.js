@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 
 // Action Types
-const prefix = '@@FRIEZA/PAGE_LOADER';
+const prefix = '@@TEAM_GRIFFIN/PAGE_LOADER';
 export const DESTROYED = `${prefix}/M_DESTROYED`;
 export const LOADED = `${prefix}/M_LOADED`;
 export const CONFIGURED = `${prefix}/M_CONFIGURED`;

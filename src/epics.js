@@ -1,33 +1,34 @@
 import * as signals from './signals';
 import * as messages from './messages';
-import { map } from 'rxjs/operator/map';
-import { combineEpics } from 'redux-observable';
-import { delay } from 'rxjs/operator/delay';
-import { of } from 'rxjs/observable/of';
-import { switchMap } from 'rxjs/operator/switchMap';
+import { combineEpics, select } from 'redux-most';
 import { getDelay } from './selectors';
+import * as most from 'most';
+import * as r from 'ramda';
+
+const mmapc = r.curry(most.map);
 
 export const loaded = (actions$, store) => {
-  return actions$.ofType(messages.LOADED)
-    ::switchMap(() => {
+  return r.pipe(
+    select(messages.LOADED),
+    mmapc(() => {
       const state = store.getState();
       const delayTime = getDelay(state);
-
-      return of(messages.destroyed())
-        ::delay(delayTime);
-    });
+      return most.of(messages.destroyed()).delay(delayTime);
+    }),
+    most.switchLatest,
+  )(actions$);
 };
 
 export const configure = (actions$) => {
-  return actions$.ofType(signals.CONFIGURE)
-    ::map(({
-     payload,
-    }) => {
-      return messages.configured(payload);
-    });
+  return r.pipe(
+    select(signals.CONFIGURE),
+    mmapc(({
+      payload
+    }) => messages.configured(payload)),
+  )(actions$);
 };
 
-export default combineEpics(
+export const rootEpic = () => combineEpics([
   loaded,
   configure,
-);
+]);
