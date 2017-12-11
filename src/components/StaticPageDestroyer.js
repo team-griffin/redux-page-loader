@@ -10,7 +10,7 @@ import {
 
 const PureStaticPageDestroyer = ({
   component,
-  ...rest,
+  ...rest
 }) => createElement(component, {
   ...rest,
 });
@@ -20,7 +20,7 @@ const enhance = compose(
   setPropTypes({
     dom: PropTypes.object,
     domSelector: PropTypes.string.isRequired,
-    component: PropTypes.node.isRequired,    
+    component: PropTypes.node.isRequired,
   }),
   defaultProps({
     dom: document,
@@ -30,8 +30,8 @@ const enhance = compose(
       const pageLoader = this.props.dom.querySelector(this.props.domSelector);
       if (pageLoader != null) {
         pageLoader.parentNode.removeChild(pageLoader);
-      }      
-    }
+      }
+    },
   }),
 );
 

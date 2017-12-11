@@ -23,7 +23,7 @@ export const configure = (actions$) => {
   return r.pipe(
     select(signals.CONFIGURE),
     mmapc(({
-      payload
+      payload,
     }) => messages.configured(payload)),
   )(actions$);
 };
