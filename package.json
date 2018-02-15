@@ -1,6 +1,6 @@
 {
   "name": "@team-griffin/redux-page-loader",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "dist/cjs/redux-page-loader.js",
   "module": "dist/es/redux-page-loader.js",
   "repository": "git@github.com:team-griffin/redux-page-loader.git",
