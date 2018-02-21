@@ -19,5 +19,19 @@
   "plugins": [
     ["transform-object-rest-spread", { "useBuiltIns": true }],
     "ramda"
-  ]
+  ],
+
+  "env": {
+    "test": {
+      "presets": [
+        "react",
+        [
+          "env",
+          {
+            "modules": "commonjs"
+          }
+        ]
+      ]
+    }
+  }
 }

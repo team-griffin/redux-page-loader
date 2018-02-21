@@ -80,6 +80,19 @@ This is a connected component.
 
 ```jsx
 <PageGuard
+  pageComponent={
+    <MyComponent/> // <-- This is your application
+  }
+  destroyerProps={{
+    component: StaticPageDestroy, // <-- This is your transition component
+    propsToPass,
+    morePropsToPass,
+  }}
+/>
+```
+you can also pass in a render function to `pageComponent`:
+```jsx
+<PageGuard
   pageComponent={() => {
     return (
       <MyComponent/> // <-- This is your application

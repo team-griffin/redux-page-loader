@@ -1,9 +1,12 @@
-import React, { createElement } from 'react';
-import PropTypes from 'prop-types';
+import React, {
+  createElement,
+  cloneElement,
+  isValidElement,
+} from 'react';
 import StaticPageDestroyer from './StaticPageDestroyer';
 import {
-  setPropTypes,
   setDisplayName,
+  shouldUpdate,
   compose,
 } from 'recompose';
 import {
@@ -13,6 +16,11 @@ import {
   always,
   both,
   complement,
+  pipe,
+  omit,
+  lensProp,
+  over,
+  ifElse,
   T,
 } from 'ramda';
 
@@ -22,15 +30,19 @@ const isLoadingInProps = complement(isLoadedInProps);
 const isDestroyedInProps = propSatisfies(equals(true), 'destroyed');
 const isAliveInProps = complement(isDestroyedInProps);
 
+const createOrClone = ifElse(
+  isValidElement,
+  (Component) => cloneElement(Component, { key: 'pageComponent' }),
+  (Component) => createElement(Component, { key: 'pageComponent' }),
+);
+
 const renderSPD = ({
   pageComponent,
   domSelector,
   destroyerProps,
 }) => (
   <div key="root">
-    {createElement(pageComponent, {
-      key: 'pageComponent',
-    })}
+    {createOrClone(pageComponent)}
     <StaticPageDestroyer
       key="spd"
       domSelector={domSelector}
@@ -43,9 +55,7 @@ const renderPage = ({
   pageComponent,
 }) => (
   <div key="root">
-    {createElement(pageComponent, {
-      key: 'pageComponent',
-    })}
+    {createOrClone(pageComponent)}
   </div>
 );
 
@@ -53,6 +63,7 @@ export const PurePageGuard = cond([
   // Do not render anything if the page is still loading
   // This is because we have a static page loader already
   // in the page.
+  // eslint-disable-next-line fp/no-nil
   [ isLoadingInProps, always(null) ],
   [ both(isLoadedInProps, isAliveInProps), renderSPD ],
   [ T, renderPage ],
@@ -60,12 +71,21 @@ export const PurePageGuard = cond([
 
 export const enhance = compose(
   setDisplayName('PageGuard'),
-  setPropTypes({
-    loaded: PropTypes.boolean,
-    destroyed: PropTypes.boolean,
-    domSelector: PropTypes.string.isRequired,
-    pageComponent: PropTypes.object.isRequired,
-    destroyerProps: PropTypes.object.isRequired,
+  shouldUpdate((prevProps, nextProps) => {
+    const getRelevantProps = pipe(
+      omit([ 'pageComponent' ]),
+      over(
+        lensProp('destroyerProps'),
+        omit([ 'component' ]),
+      ),
+    );
+
+    const isSame = equals(
+      getRelevantProps(prevProps),
+      getRelevantProps(nextProps),
+    );
+
+    return isSame === false;
   }),
 );
 
