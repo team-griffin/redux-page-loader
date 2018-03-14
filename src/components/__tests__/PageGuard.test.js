@@ -23,7 +23,6 @@ describe('<PurePageGuard/>', function(){
           loaded={false}
           destroyed={false}
           domSelector=".page-loader"
-          destroyerProps={{}}
         />
       );
 
@@ -37,8 +36,8 @@ describe('<PurePageGuard/>', function(){
           loaded={true}
           destroyed={false}
           domSelector=".page-loader"
-          destroyerProps={{}}
-          pageComponent={() => null}
+          renderPage={() => null}
+          renderDestroyer={() => null}
         />
       );
 
@@ -46,13 +45,18 @@ describe('<PurePageGuard/>', function(){
     });
     it('renders the page component behind the destroyer', function () {
       const Component = () => (<div/>);
+
       const wrapper = shallow(
         <PurePageGuard
           loaded={true}
           destroyed={false}
           domSelector=".page-loader"
-          destroyerProps={{}}
-          pageComponent={Component}
+          renderPage={() => (
+            <Component/>
+          )}
+          renderDestroyer={() => (
+            <div/>
+          )}
         />
       );
 
@@ -67,8 +71,12 @@ describe('<PurePageGuard/>', function(){
           loaded={true}
           destroyed={true}
           domSelector=".page-loader"
-          destroyerProps={{}}
-          pageComponent={Component}
+          renderPage={() => (
+            <Component/>
+          )}
+          renderDestroyer={() => (
+            <div/>
+          )}
         />
       );
 
@@ -82,8 +90,12 @@ describe('<PurePageGuard/>', function(){
           loaded={true}
           destroyed={true}
           domSelector=".page-loader"
-          destroyerProps={{}}
-          pageComponent={<Component/>}
+          renderPage={() => (
+            <Component/>
+          )}
+          renderDestroyer={() => (
+            <div/>
+          )}
         />
       );
 

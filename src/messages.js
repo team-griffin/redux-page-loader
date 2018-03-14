@@ -1,10 +1,10 @@
 import { createAction } from 'redux-actions';
 
 // Action Types
-const prefix = '@@TEAM_GRIFFIN/PAGE_LOADER';
-export const DESTROYED = `${prefix}/M_DESTROYED`;
-export const LOADED = `${prefix}/M_LOADED`;
-export const CONFIGURED = `${prefix}/M_CONFIGURED`;
+const prefix = '@@team-griffin/redux-page-loader/M_';
+export const DESTROYED = `${prefix}DESTROYED`;
+export const LOADED = `${prefix}LOADED`;
+export const CONFIGURED = `${prefix}CONFIGURED`;
 // Actions
 export const destroyed = createAction(DESTROYED);
 export const loaded = createAction(LOADED);

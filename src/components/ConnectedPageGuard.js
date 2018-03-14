@@ -1,6 +1,10 @@
 import PageGuard from './PageGuard';
 import { connect } from 'react-redux';
-import { isDestroyed, isLoaded, getPageLoader } from '../selectors';
+import {
+  isDestroyed,
+  isLoaded,
+  getPageLoader,
+} from '../selectors';
 import {
   compose,
 } from 'recompose';
