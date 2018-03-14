@@ -28,7 +28,7 @@ export const configure = (actions$) => {
   )(actions$);
 };
 
-export const rootEpic = () => combineEpics([
+export const rootEpic = combineEpics([
   loaded,
   configure,
 ]);

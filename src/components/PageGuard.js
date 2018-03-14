@@ -1,92 +1,64 @@
 import React, {
-  createElement,
-  cloneElement,
-  isValidElement,
+  Fragment,
 } from 'react';
 import StaticPageDestroyer from './StaticPageDestroyer';
 import {
   setDisplayName,
-  shouldUpdate,
   compose,
 } from 'recompose';
-import {
-  cond,
-  propSatisfies,
-  equals,
-  always,
-  both,
-  complement,
-  pipe,
-  omit,
-  lensProp,
-  over,
-  ifElse,
-  T,
-} from 'ramda';
+import * as r from 'ramda';
 
-const isLoadedInProps = propSatisfies(equals(true), 'loaded');
-const isLoadingInProps = complement(isLoadedInProps);
+const isLoadedInProps = r.propSatisfies(r.equals(true), 'loaded');
+const isLoadingInProps = r.complement(isLoadedInProps);
 
-const isDestroyedInProps = propSatisfies(equals(true), 'destroyed');
-const isAliveInProps = complement(isDestroyedInProps);
-
-const createOrClone = ifElse(
-  isValidElement,
-  (Component) => cloneElement(Component, { key: 'pageComponent' }),
-  (Component) => createElement(Component, { key: 'pageComponent' }),
-);
+const isDestroyedInProps = r.propSatisfies(r.equals(true), 'destroyed');
+const isAliveInProps = r.complement(isDestroyedInProps);
 
 const renderSPD = ({
-  pageComponent,
+  destroyed,
+  loaded,
   domSelector,
-  destroyerProps,
+  renderPage,
+  renderDestroyer,
 }) => (
-  <div key="root">
-    {createOrClone(pageComponent)}
+  <Fragment key="root">
+    {renderPage({
+      destroyed,
+      loaded,
+    })}
     <StaticPageDestroyer
       key="spd"
       domSelector={domSelector}
-      {...destroyerProps}
+      render={renderDestroyer}
     />
-  </div>
+  </Fragment>
 );
 
-const renderPage = ({
-  pageComponent,
+const renderWrappingPage = ({
+  destroyed,
+  loaded,
+  renderPage,
 }) => (
-  <div key="root">
-    {createOrClone(pageComponent)}
-  </div>
+  <Fragment key="root">
+    {renderPage({
+      destroyed,
+      loaded,
+    })}
+  </Fragment>
 );
 
-export const PurePageGuard = cond([
+export const PurePageGuard = r.cond([
   // Do not render anything if the page is still loading
   // This is because we have a static page loader already
   // in the page.
   // eslint-disable-next-line fp/no-nil
-  [ isLoadingInProps, always(null) ],
-  [ both(isLoadedInProps, isAliveInProps), renderSPD ],
-  [ T, renderPage ],
+  [ isLoadingInProps, r.always(null) ],
+  [ r.both(isLoadedInProps, isAliveInProps), renderSPD ],
+  [ r.T, renderWrappingPage ],
 ]);
 
 export const enhance = compose(
   setDisplayName('PageGuard'),
-  shouldUpdate((prevProps, nextProps) => {
-    const getRelevantProps = pipe(
-      omit([ 'pageComponent' ]),
-      over(
-        lensProp('destroyerProps'),
-        omit([ 'component' ]),
-      ),
-    );
-
-    const isSame = equals(
-      getRelevantProps(prevProps),
-      getRelevantProps(nextProps),
-    );
-
-    return isSame === false;
-  }),
 );
 
 export default enhance(PurePageGuard);

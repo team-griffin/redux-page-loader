@@ -80,41 +80,28 @@ This is a connected component.
 
 ```jsx
 <PageGuard
-  pageComponent={
+  renderPage={() => (
     <MyComponent/> // <-- This is your application
-  }
-  destroyerProps={{
-    component: StaticPageDestroy, // <-- This is your transition component
-    propsToPass,
-    morePropsToPass,
-  }}
-/>
-```
-you can also pass in a render function to `pageComponent`:
-```jsx
-<PageGuard
-  pageComponent={() => {
-    return (
-      <MyComponent/> // <-- This is your application
-    );
-  }}
-  destroyerProps={{
-    component: StaticPageDestroy, // <-- This is your transition component
-    propsToPass,
-    morePropsToPass,
-  }}
+  )}
+  renderDestroyer={() => (
+    <MyDestroyer/>
+  )}
 />
 ```
 
-### Setup
-This module uses epics to handle business logic, and reducers to handle state.
+## Setup
+This module uses epics to handle business logic, and reducers to handle state. If you instead prefer to have it setup as a middleware that option is also available.
 
+### Method 1 - redux-most epics
 ```javascript
 // Reducer
-import { reducer as pageLoader } from '@team-griffin/redux-page-loader';
+import {
+  reducer as pageLoader,
+  REDUCER_MOUNT_POINT,
+} from '@team-griffin/redux-page-loader';
 
 combineReducers({
-  pageLoader,
+  [REDUCER_MOUNT_POINT]: pageLoader,
 });
 
 // Epics
@@ -124,6 +111,24 @@ import { pageLoaderEpics } from '@team-griffin/redux-page-loader';
 createEpicMiddleware(combineEpics([
   pageLoaderEpics,
 ]));
+```
+
+### Method 2 - redux middleware
+```javascript
+// Reducer
+import {
+  reducer as pageLoader,
+  REDUCER_MOUNT_POINT,
+} from '@team-griffin/redux-page-loader';
+
+combineReducers({
+  [REDUCER_MOUNT_POINT]: pageLoader,
+});
+
+// Epics
+import { middleware } from '@team-griffin/redux-page-loader';
+
+// Add middleware to the store
 ```
 
 ### Loaded and Configuration

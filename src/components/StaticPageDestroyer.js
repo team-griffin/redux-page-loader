@@ -1,36 +1,35 @@
-import { createElement } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import {
   defaultProps,
   setDisplayName,
   compose,
-  setPropTypes,
   lifecycle,
 } from 'recompose';
+import * as r from 'ramda';
 
 const PureStaticPageDestroyer = ({
-  component,
-  ...rest
-}) => createElement(component, {
-  ...rest,
-});
+  render,
+}) => render({});
 
 const enhance = compose(
   setDisplayName('StaticPageDestroyer'),
-  setPropTypes({
-    dom: PropTypes.object,
-    domSelector: PropTypes.string.isRequired,
-    component: PropTypes.node.isRequired,
-  }),
   defaultProps({
     dom: document,
   }),
   lifecycle({
     componentWillUnmount: function() {
-      const pageLoader = this.props.dom.querySelector(this.props.domSelector);
-      if (pageLoader != null) {
-        pageLoader.parentNode.removeChild(pageLoader);
-      }
+      const {
+        dom,
+        domSelector,
+      } = this.props;
+      
+      r.pipe(
+        r.bind(dom.querySelector, dom),
+        r.unless(
+          r.isNil,
+          r.tap((pageLoader) => pageLoader.parentNode.removeChild(pageLoader)),
+        ),
+      )(domSelector);
     },
   }),
 );
