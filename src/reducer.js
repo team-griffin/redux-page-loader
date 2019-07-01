@@ -11,7 +11,7 @@ export const initialState = {
 
 export default createReducer(initialState, {
   [messages.CONFIGURED]: (state, {
-   payload,
+    payload,
   }) => r.merge(
     state,
     {

@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   defaultProps,
   setDisplayName,
@@ -17,12 +16,14 @@ const enhance = compose(
     dom: document,
   }),
   lifecycle({
+    // eslint-disable-next-line fp/no-nil
     componentWillUnmount: function() {
       const {
         dom,
         domSelector,
+        // eslint-disable-next-line fp/no-this
       } = this.props;
-      
+
       r.pipe(
         r.bind(dom.querySelector, dom),
         r.unless(

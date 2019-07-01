@@ -1,6 +1,9 @@
 import * as signals from './signals';
 import * as messages from './messages';
-import { combineEpics, select } from 'redux-most';
+import {
+  combineEpics,
+  select,
+} from 'redux-most';
 import { getDelay } from './selectors';
 import * as most from 'most';
 import * as r from 'ramda';
