@@ -1,6 +1,6 @@
 {
   "name": "@team-griffin/redux-page-loader",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "main": "dist/cjs/redux-page-loader.js",
   "module": "dist/es/redux-page-loader.js",
   "repository": "git@github.com:team-griffin/redux-page-loader.git",
@@ -23,7 +23,7 @@
     "most": "^1.4.1",
     "ramda": "^0.x.x",
     "react-redux": "^5.0.7",
-    "recompose": "^0.26.0",
+    "recompose": "^0.x.x",
     "redux-actions": "^2.3.0",
     "redux-create-reducer": "^1.1.1",
     "redux-most": "^0.6.3",
